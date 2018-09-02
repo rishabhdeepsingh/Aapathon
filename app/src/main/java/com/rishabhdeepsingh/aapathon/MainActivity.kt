@@ -9,8 +9,6 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
-import android.os.Handler
-import android.os.SystemClock
 import android.support.design.widget.NavigationView
 import android.support.design.widget.TabLayout
 import android.support.v4.app.ActivityCompat
@@ -113,12 +111,11 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         }
     }
 
-    @SuppressLint("MissingPermission", "WrongConstant")
+    @SuppressLint("MissingPermission", "WrongConstant", "NewApi")
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         // Handle navigation view item clicks here.
         when (item.itemId) {
             R.id.nav_camera -> {
-                //Check if Camera Permissions are not Given ask and then Start the Camera
                 val intent = Intent("android.media.action.IMAGE_CAPTURE")
                 startActivity(intent)
                 Toast.makeText(this, "Camera", Toast.LENGTH_SHORT).show()
@@ -178,23 +175,20 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 val notificationTime = findViewById<EditText>(R.id.notification_time)
                 val notificationButton = findViewById<Button>(R.id.notification_button)
                 val notificationBuilder = NotificationCompat.Builder(this, "channel_id")
-                val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+                notificationBuilder
+                        .setWhen(System.currentTimeMillis())
+                        .setAutoCancel(true)
+                        .setSmallIcon(R.drawable.ic_menu_send)
+                        .setTicker("Aapathon")
+                        .setContentTitle(notificationTitle.text.toString())
+                        .setContentText(notificationText.text.toString()).priority = NotificationCompat.PRIORITY_MAX
+
+                val intent = Intent(this, MainActivity::class.java)
+                val pendingIntent = PendingIntent.getActivity(this, 0, intent, 0)
+                val notificationManager = this.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
                 notificationButton.setOnClickListener {
-                    notificationBuilder.setAutoCancel(true)
-                            .setWhen(SystemClock.elapsedRealtime())
-                            .setSmallIcon(R.drawable.notification_icon_background)
-                            .setTicker("Hearty365")
-                            .setContentTitle(notificationTitle.text)
-                            .setContentText(notificationText.text)
-                    val intent = Intent(this, MainActivity::class.java)
-                    val pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
                     notificationBuilder.setContentIntent(pendingIntent)
-                    Handler().postDelayed({
-                        notificationManager.notify(1, notificationBuilder.build())
-                        notificationText.text.clear()
-                        notificationTitle.text.clear()
-                        notificationTime.text.clear()
-                    }, notificationTime.text.toString().toLong() * 1000)
+                    notificationManager.notify(1, notificationBuilder.build())
                     Toast.makeText(this, "Notification has been set", Toast.LENGTH_SHORT).show()
                 }
             }
@@ -242,13 +236,13 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     private fun allPermissions() {
-        ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.CAMERA), 1)
-        ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), 1)
-        ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.INTERNET), 1)
-        ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), 1)
-        ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_NETWORK_STATE), 1)
-        ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.CALL_PHONE), 1)
-        ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.SEND_SMS), 1)
+        ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.CAMERA,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                Manifest.permission.INTERNET,
+                Manifest.permission.ACCESS_FINE_LOCATION,
+                Manifest.permission.ACCESS_NETWORK_STATE,
+                Manifest.permission.CALL_PHONE,
+                Manifest.permission.SEND_SMS), 1)
     }
 
     private fun askPermission(permissionString: String, code: Int) {
