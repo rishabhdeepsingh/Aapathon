@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--The API Call to Google Maps-->
+    <!--https://console.developers.google.com-->
+    <string name="google_map_key" translatable="false">AIzaSyCkEUMFj84w8lRpegsUJjY2FfQQLw8WAsg</string>
+</resources>
