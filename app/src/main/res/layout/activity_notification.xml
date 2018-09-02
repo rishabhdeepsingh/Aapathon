@@ -6,13 +6,13 @@
     android:orientation="vertical"
     android:paddingTop="20dp">
 
-    <EditText
-        android:id="@+id/notification_time"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:gravity="center"
-        android:hint="@string/sample_time"
-        android:inputType="time" />
+    <!--<EditText-->
+        <!--android:id="@+id/notification_time"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="50dp"-->
+        <!--android:gravity="center"-->
+        <!--android:hint="@string/sample_time"-->
+        <!--android:inputType="time" />-->
 
     <EditText
         android:id="@+id/notification_title"

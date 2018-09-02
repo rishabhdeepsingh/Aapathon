@@ -170,25 +170,25 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             }
             R.id.nav_send -> {
                 setContentView(R.layout.activity_notification)
-                val notificationTitle = findViewById<EditText>(R.id.notification_title)
-                val notificationText = findViewById<EditText>(R.id.notification_text)
-                val notificationTime = findViewById<EditText>(R.id.notification_time)
+                val notificationTitle = findViewById<EditText>(R.id.notification_title).text.toString()
+                val notificationText = findViewById<EditText>(R.id.notification_text).text.toString()
+//                val notificationTime = findViewById<EditText>(R.id.notification_time)
                 val notificationButton = findViewById<Button>(R.id.notification_button)
                 val notificationBuilder = NotificationCompat.Builder(this, "channel_id")
+                val ii = Intent(this, MainActivity::class.java)
+                val pendingIntent = PendingIntent.getActivity(this, 0, ii, 0);
+
                 notificationBuilder
-                        .setWhen(System.currentTimeMillis())
-                        .setAutoCancel(true)
+                        .setContentIntent(pendingIntent)
                         .setSmallIcon(R.drawable.ic_menu_send)
                         .setTicker("Aapathon")
-                        .setContentTitle(notificationTitle.text.toString())
-                        .setContentText(notificationText.text.toString()).priority = NotificationCompat.PRIORITY_MAX
+                        .setContentTitle(notificationTitle)
+                        .setVibrate(longArrayOf(0L, 1L, 2L, 500L, 1000L))
+                        .setContentText(notificationText).priority = NotificationCompat.PRIORITY_MAX
 
-                val intent = Intent(this, MainActivity::class.java)
-                val pendingIntent = PendingIntent.getActivity(this, 0, intent, 0)
-                val notificationManager = this.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+                val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
                 notificationButton.setOnClickListener {
-                    notificationBuilder.setContentIntent(pendingIntent)
-                    notificationManager.notify(1, notificationBuilder.build())
+                    notificationManager.notify(0, notificationBuilder.build())
                     Toast.makeText(this, "Notification has been set", Toast.LENGTH_SHORT).show()
                 }
             }
