@@ -16,5 +16,5 @@ This app is for Codefest IIT BHU Aapathon Contest.
    
    
 # Contact Details
-   * Phone Number - 8557030007, 7001547968
+   * Phone Number - 8557030007
    * Email - rishabhdeepsingh98@gmail.com
